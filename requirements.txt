@@ -1,0 +1,194 @@
+absl-py @ file:///tmp/build/80754af9/absl-py_1615411202722/work
+aiohttp @ file:///tmp/build/80754af9/aiohttp_1614360992924/work
+argon2-cffi==21.3.0
+argon2-cffi-bindings==21.2.0
+astor==0.8.1
+asttokens==2.0.5
+astunparse==1.6.3
+async-generator==1.10
+async-timeout==3.0.1
+attrs==21.4.0
+backcall==0.2.0
+barbar==0.2.1
+beautifulsoup4==4.11.1
+bleach==5.0.0
+blinker==1.4
+brotlipy==0.7.0
+cachetools @ file:///tmp/build/80754af9/cachetools_1619597386817/work
+certifi @ file:///croot/certifi_1683875369620/work/certifi
+cffi==1.15.0
+chardet @ file:///tmp/build/80754af9/chardet_1605303185383/work
+click @ file:///tmp/build/80754af9/click_1621604852318/work
+coverage @ file:///tmp/build/80754af9/coverage_1614613670853/work
+cryptography @ file:///tmp/build/80754af9/cryptography_1616769286105/work
+cv==1.0.0
+cycler==0.10.0
+Cython @ file:///tmp/build/80754af9/cython_1618435160151/work
+debugpy==1.6.0
+decorator==5.1.1
+defusedxml==0.7.1
+dicom2nifti==2.3.0
+empatches==0.2.3
+entrypoints==0.4
+executing==0.8.3
+fastjsonschema==2.15.3
+filelock==3.13.1
+flatbuffers @ file:///tmp/build/80754af9/python-flatbuffers_1614345733764/work
+fsspec==2024.2.0
+gast==0.3.3
+google-auth @ file:///tmp/build/80754af9/google-auth_1622042963536/work
+google-auth-oauthlib==0.4.1
+google-pasta @ file:///Users/ktietz/demo/mc3/conda-bld/google-pasta_1630577991354/work
+grpcio @ file:///tmp/build/80754af9/grpcio_1614884175859/work
+h5py==2.10.0
+idna @ file:///home/linux1/recipes/ci/idna_1610986105248/work
+imageio==2.31.1
+imgaug @ git+https://github.com/aleju/imgaug.git@0101108d4fed06bc5056c4a03e2bcb0216dac326
+importlib-metadata @ file:///tmp/build/80754af9/importlib-metadata_1617874469820/work
+importlib-resources==5.7.1
+ipykernel==6.14.0
+ipython==8.4.0
+ipython-genutils==0.2.0
+ipywidgets==7.7.0
+jedi==0.18.1
+Jinja2==3.1.2
+joblib==1.1.0
+jsonschema==4.6.0
+jupyter==1.0.0
+jupyter-client==7.3.4
+jupyter-console==6.4.3
+jupyter-core==4.10.0
+jupyterlab-pygments==0.2.2
+jupyterlab-widgets==1.1.0
+Keras==2.3.1
+Keras-Applications==1.0.8
+Keras-Preprocessing @ file:///tmp/build/80754af9/keras-preprocessing_1612283640596/work
+kiwisolver==1.3.1
+kornia==0.6.2
+lazy_loader==0.2
+littleutils==0.2.2
+llvmlite==0.41.1
+Markdown @ file:///tmp/build/80754af9/markdown_1614363528767/work
+MarkupSafe==2.1.1
+matplotlib==3.4.2
+matplotlib-inline==0.1.3
+medutils==0.1.21
+mistune==0.8.4
+mkl-fft==1.3.0
+mkl-random @ file:///tmp/build/80754af9/mkl_random_1618853849286/work
+mkl-service==2.3.0
+monai==1.2.0
+mpmath==1.3.0
+multidict @ file:///tmp/build/80754af9/multidict_1607367757617/work
+nbclient==0.6.4
+nbconvert==6.5.0
+nbformat==5.4.0
+nest-asyncio==1.5.5
+networkx==3.1
+nibabel==3.2.1
+notebook==6.4.12
+numpy==1.23.5
+nvidia-cublas-cu12==12.1.3.1
+nvidia-cuda-cupti-cu12==12.1.105
+nvidia-cuda-nvrtc-cu12==12.1.105
+nvidia-cuda-runtime-cu12==12.1.105
+nvidia-cudnn-cu12==8.9.2.26
+nvidia-cufft-cu12==11.0.2.54
+nvidia-curand-cu12==10.3.2.106
+nvidia-cusolver-cu12==11.4.5.107
+nvidia-cusparse-cu12==12.1.0.106
+nvidia-nccl-cu12==2.19.3
+nvidia-nvjitlink-cu12==12.3.101
+nvidia-nvtx-cu12==12.1.105
+oauthlib==3.1.0
+opencv-python==4.7.0.72
+opt-einsum @ file:///tmp/build/80754af9/opt_einsum_1621500238896/work
+outdated==0.2.2
+packaging==21.3
+pandas==1.5.0
+pandas-flavor==0.5.0
+pandocfilters==1.5.0
+parameterized==0.9.0
+parso==0.8.3
+patsy==0.5.3
+pexpect==4.8.0
+pickleshare==0.7.5
+Pillow==9.5.0
+pingouin==0.5.3
+piq==0.7.0
+prometheus-client==0.14.1
+prompt-toolkit==3.0.29
+protobuf==3.14.0
+psutil==5.9.1
+ptyprocess==0.7.0
+pure-eval==0.2.2
+pyasn1==0.4.8
+pyasn1-modules==0.2.8
+pycparser==2.21
+pydicom==2.2.2
+Pygments==2.12.0
+PyJWT==1.7.1
+pyOpenSSL @ file:///tmp/build/80754af9/pyopenssl_1608057966937/work
+pyparsing==3.0.9
+pyrsistent==0.18.1
+PySimpleGUI==4.60.5
+PySocks @ file:///tmp/build/80754af9/pysocks_1605305779399/work
+python-dateutil==2.8.2
+pytz==2022.4
+PyWavelets==1.4.1
+PyYAML==6.0
+pyzmq==23.1.0
+qtconsole==5.3.1
+QtPy==2.1.0
+requests @ file:///tmp/build/80754af9/requests_1608241421344/work
+requests-oauthlib==1.3.0
+resize @ git+https://gitlab.com/iacl/resize@7edd72d4a14d0b650e90313ab63f9d690a189ced
+rsa @ file:///tmp/build/80754af9/rsa_1614366226499/work
+scikit-image==0.21.0
+scikit-learn==1.1.1
+scipy==1.10.1
+seaborn==0.12.2
+seg-metrics==1.1.3
+Send2Trash==1.8.0
+shapely==2.0.1
+SimpleITK==2.0.2
+six @ file:///tmp/build/80754af9/six_1605205327372/work
+sklearn==0.0
+soupsieve==2.3.2.post1
+stack-data==0.2.0
+statsmodels==0.14.0
+sympy==1.12
+tabulate==0.9.0
+tensorboard==2.2.2
+tensorboard-data-server==0.6.1
+tensorboard-plugin-wit==1.6.0
+tensorflow==2.2.0
+tensorflow-estimator==2.2.0
+tensorflow-gpu==2.2.0
+termcolor @ file:///croot/termcolor_1668084651543/work
+terminado==0.15.0
+testpath==0.4.4
+threadpoolctl==3.1.0
+tifffile==2023.4.12
+tinycss2==1.1.1
+torch==1.9.0
+torch-fidelity==0.3.0
+torch-tb-profiler==0.4.0
+torchmetrics==0.11.1
+torchsummary==1.5.1
+torchvision==0.10.0
+tornado==6.1
+tqdm==4.60.0
+traitlets==5.2.2.post1
+transforms3d==0.4.1
+triton==2.2.0
+typing_extensions==4.10.0
+urllib3 @ file:///tmp/build/80754af9/urllib3_1615837158687/work
+wcwidth==0.2.5
+webencodings==0.5.1
+Werkzeug @ file:///home/ktietz/src/ci/werkzeug_1611932622770/work
+widgetsnbextension==3.6.0
+wrapt @ file:///tmp/build/80754af9/wrapt_1638433239696/work
+xarray==2023.1.0
+yarl @ file:///tmp/build/80754af9/yarl_1606939922162/work
+zipp==3.8.0
