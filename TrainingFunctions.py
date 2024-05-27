@@ -137,6 +137,79 @@ def visualize_Multi_slice(lr, sr, epoch, path,title_,rec_title,index, writer,ste
         plt.show()
 
 
+def visualize_Multi_slice_test(lr, sr, path, title_,test_=False):
+
+    if test_:
+        test_string = 'test'
+        os.makedirs(path+'/test', exist_ok=True)
+
+    else:
+        test_string = 'val'
+        os.makedirs(path + '/val', exist_ok=True)
+
+    lr_dim = lr.dim()
+    lr = torch.rot90(lr, 2, [lr_dim - 2, lr_dim -1])
+    sr_dim = sr.dim()
+    sr = torch.rot90(sr, 2, [sr_dim - 2, sr_dim -1])
+    path = path + '/' + test_string
+    title = title_.split("/")[-1] + "_" + title_.split("/")[0]
+    fig, axs = plt.subplots(nrows=4, ncols=3, figsize=(9, 12))
+    lr = lr.squeeze(dim=1)
+    sr = sr.squeeze(dim=1)
+
+    imgs = []
+    for k in range((3 + 2)*2):
+        imgs.append('img'+str(k))
+
+
+    for i in range(2):
+
+        img1 = axs[i * 2, 0].imshow(np.squeeze(lr.cpu())[9+ i,0,:,:], vmin=0, vmax=1,cmap='gray')
+        axs[i * 2, 0].set_title('Input - 1')
+        axs[i * 2, 0].grid(False)
+        axs[i * 2, 0].axis('off')
+
+        img2 = axs[i * 2,1].imshow(np.squeeze(lr.cpu())[9 + i,1, :, :], vmin=0, vmax=1,cmap='gray')
+        axs[i * 2, 1].set_title('Input ')
+        axs[i * 2, 1].grid(False)
+        axs[i * 2, 1].axis('off')
+
+
+        img3 = axs[i * 2, 2].imshow(np.squeeze(lr.cpu())[9 + i,2, :, :], vmin=0, vmax=1,cmap='gray')
+        axs[i * 2, 2].set_title('Input +1 ')
+        axs[i * 2, 2].grid(False)
+        axs[i * 2, 2].axis('off')
+
+
+
+        img4 = axs[i * 2+1, 0].imshow(np.squeeze(lr.cpu())[9+ i,1,:,:], vmin=0, vmax=1,cmap='gray')
+        axs[i * 2+1, 0].set_title('Input')
+        axs[i * 2+1, 0].grid(False)
+        axs[i * 2+1, 0].axis('off')
+
+        img5 = axs[i * 2+1, 1].imshow(np.squeeze(sr.detach().cpu())[9 + i], vmin=0, vmax=1,cmap='gray')
+        axs[i * 2+1, 1].set_title('Gen')
+
+        axs[i * 2+1, 1].grid(False)
+        axs[i * 2+1, 1].axis('off')
+
+        img6 = axs[i * 2+1, 2].imshow(np.abs(np.squeeze(lr.cpu())[9 + i,1,:,:]- np.squeeze(sr.detach().cpu())[9 + i])
+                                    , vmin=0, vmax=1,cmap='gray')
+        axs[i * 2+1, 2].set_title('Diff')
+        axs[i * 2+1, 2].grid(False)
+        axs[i * 2+1, 2].axis('off')
+
+
+    fig.suptitle(title, fontsize=10)
+    fig.tight_layout()
+
+    title_save = title
+    plt.savefig(path + '/' +'_' + title_save+ '.png' )
+    plt.close()
+
+
+
+
 def visualize_reconstrated_no_hr(lr_0,lr_1,lr_2, sr, epoch, path, title_,rec_title,index, writer,step):
 
     fig, axs = plt.subplots(nrows=2, ncols=3, figsize=(9, 12))
@@ -183,7 +256,7 @@ def visualize_reconstrated_no_hr(lr_0,lr_1,lr_2, sr, epoch, path, title_,rec_tit
         plt.show()
 
 
-def visualize_reconstrated(lr_0,lr_1,lr_2, sr, path, title_,index,test_=False):
+def visualize_reconstrated(lr_0,lr_1,lr_2, sr, path, title_,test_=False):
 
     if test_:
         test_string = 'test'
@@ -717,6 +790,9 @@ def validate(model,InceptionV3_model, valid_dataloader_lr,valid_dataloader_hr, e
 
 def Test(model, valid_dataloader_lr,valid_dataloader_hr,result_dir,patch_size,Incep_model = None):
 
+    result_dir_for_tensors = result_dir +"/saved_tensors"
+    os.makedirs(result_dir_for_tensors, exist_ok=True)
+
     batch_time = AverageMeter("Time", ":6.3f")
     progress = ProgressMeter(len(valid_dataloader_lr), [batch_time], prefix="Valid: ")
 
@@ -777,30 +853,28 @@ def Test(model, valid_dataloader_lr,valid_dataloader_hr,result_dir,patch_size,In
                 if config.save_tensor:
 
                     if slice_title[0].split('_slice')[0] != temp_title:
-                        if "Ax" not in result_dir:
-                            print(temp_file_hr_weight_.shape)
-                            save_tensor(temp_file_hr_weight_, "HR", temp_title, result_dir)
+                        print(temp_file_hr_weight_.shape)
+                        save_tensor(temp_file_hr_weight_, "HR", temp_title, result_dir_for_tensors)
                 temp_file_hr_weight = []
 
             temp_title = slice_title[0].split('_slice')[0]
             temp_file_hr_avg = []
 
             sample_num = hr_tot.size()[0]
-            print("hr_tot.shape - {}".format(hr_tot.shape))
-            print("sample_num  {}".format(sample_num))
+
             for i in range(sample_num):
 
                 hr = hr_tot[i]
-                print(hr.shape)
+
                 size_hr = [size_hr_tot[-2][i],size_hr_tot[-1][i]]
+
                 # print(size_hr)
-                print(size_hr_tot)
+
                 hr = torch.squeeze(hr)
 
-                hr = hr[:size_hr_tot[0],:,:]
+                hr = hr[:size_hr_tot[0][i],:,:]
                 hr = hr.to(config.device, non_blocking=True)
-                print(" size_hr_tot {}".format(size_hr_tot))
-                print("hr_tot {}".format(hr_tot.shape))
+
                 # print(hr.shape)
                 rec_hr = recon_im_torch_rectangle_gaus(hr, int(size_hr[0]), int(size_hr[1]),
                                                         calculate_overlap(int(size_hr[0]), patch_size),
@@ -823,8 +897,7 @@ def Test(model, valid_dataloader_lr,valid_dataloader_hr,result_dir,patch_size,In
         #hr_tot_volume_list_weight_full.append(temp_file_hr_weight.detach())
         #hr_tot_volume_list_weight.append(np.array(temp_file_hr_weight.detach().cpu()).reshape(temp_file_hr_weight.size()[0], -1))
         if config.save_tensor:
-                if "Ax" not in result_dir:
-                    save_tensor(temp_file_hr_weight_, "HR",  temp_title, result_dir)
+                    save_tensor(temp_file_hr_weight_, "HR",  temp_title, result_dir_for_tensors)
 
 
         print("rec_hr_tot len - {} ".format(len(rec_hr_tot)))
@@ -835,6 +908,7 @@ def Test(model, valid_dataloader_lr,valid_dataloader_hr,result_dir,patch_size,In
         temp_title = []
         print("Reconstract LR images")
         for index, (lr_tot, size_lr_tot,slice_title) in enumerate(valid_dataloader_lr):
+            print(slice_title)
             # if size_lr_tot[-1] == 320:
                 # print("320")
                 # print(slice_title)
@@ -852,14 +926,13 @@ def Test(model, valid_dataloader_lr,valid_dataloader_hr,result_dir,patch_size,In
 
                     if slice_title[0].split('_slice')[0] != temp_title :
                        # print(temp_file_sr_weight_.shape)
-                        save_tensor(temp_file_sr_weight_, "SR", temp_title, result_dir)
-                        if "Ax" not in result_dir:
-                            save_tensor(temp_file_lr_weight_, "LR", temp_title, result_dir)
+                        save_tensor(temp_file_sr_weight_, "SR", temp_title, result_dir_for_tensors)
+                        save_tensor(temp_file_lr_weight_, "LR", temp_title, result_dir_for_tensors)
 
                 if config.save_nifti:
                     # print(temp_file_sr_weight_.shape)
                     # temp_title_ = temp_title + "_SR"
-                    save_tensor_to_img(temp_file_sr_weight_, result_dir, temp_title)
+                    save_tensor_to_img(temp_file_sr_weight_, result_dir_for_tensors, temp_title)
                 temp_title = slice_title[0].split('_slice')[0]
                 temp_file_sr_avg = []
                 temp_file_sr_weight = []
@@ -900,8 +973,8 @@ def Test(model, valid_dataloader_lr,valid_dataloader_hr,result_dir,patch_size,In
                 # print(lr_1_rec.shape)
                 # rec_mid = pad_and_resize(lr_1_rec, [240, 240])
                 rec_mid_tot.append(rec_mid)
-                if config.FID:
-                    rec_mid_tot_max_size.append(pad_to_max_size(lr_1_rec, max_size_hr))
+
+                rec_mid_tot_max_size.append(pad_to_max_size(lr_1_rec, max_size_hr))
 
 
                 rec_sr = recon_im_torch_rectangle_gaus(sr.squeeze(), int(size_lr[0]), int(size_lr[1]),
@@ -912,35 +985,38 @@ def Test(model, valid_dataloader_lr,valid_dataloader_hr,result_dir,patch_size,In
                 temp_file_sr_weight.append(rec_sr)
                 rec_sr_resize = pad_to_max_size(rec_sr, max_size_lr).detach().cpu()
                 rec_sr_tot.append(rec_sr_resize)
-                if config.FID:
-                    rec_sr_tot_max_size.append(pad_to_max_size(rec_sr, max_size_hr))
+
+                rec_sr_tot_max_size.append(pad_to_max_size(rec_sr, max_size_hr))
                 #temp_file_sr_weight.append(rec_sr_resize)
 
                 # rec_mid_avg = pad_and_resize(lr_1_rec_avg, [240, 240])
 
 
 
-                if (index %50 == 0):
+                if index %config.image_save_freq_batch == 0  :
 
-                    rec_hr = recon_im_torch_rectangle_gaus(hr, int(size_hr[0]), int(size_hr[1]), calculate_overlap(int(size_hr[0]),patch_size), calculate_overlap(int(size_hr[1]),patch_size))
+                    rec_hr = recon_im_torch_rectangle_gaus(hr, int(size_hr[0]), int(size_hr[1]), calculate_overlap(int(size_hr[0]),patch_size)
+                                                           , calculate_overlap(int(size_hr[1]),patch_size), device = config.device).detach().cpu().squeeze(0).squeeze(0)
                     if np.isnan(rec_hr).any():
                         print("NAN")
                     #rec_hr_tot.append(rec_hr)
 
                     #rec_sr_tot.append(rec_sr)
 
-                    visualize_Multi_slice(lr, hr, sr, result_dir,'weighted'+list(slice_title)[0], index,True)
+                    visualize_Multi_slice_test(lr, sr, result_dir,'compare'+list(slice_title)[0], index)
 
                     lr_0 =  lr[:patch_amount,:,0,:,:].detach()
-                    lr_0_rec = recon_im_torch_rectangle_gaus(lr_0.squeeze(), int(size_lr[0]), int(size_lr[1]), calculate_overlap(int(size_lr[0]),patch_size), calculate_overlap(int(size_lr[1]),patch_size))
+                    lr_0_rec = recon_im_torch_rectangle_gaus(lr_0.squeeze(), int(size_lr[0]), int(size_lr[1]), calculate_overlap(int(size_lr[0]),patch_size),
+                                                             calculate_overlap(int(size_lr[1]),patch_size), device = config.device).detach().cpu().squeeze(0).squeeze(0)
                     lr_2 =  lr[:patch_amount,:,2,:,:].detach()
-                    lr_2_rec = recon_im_torch_rectangle_gaus(lr_2.squeeze(), int(size_lr[0]), int(size_lr[1]), calculate_overlap(int(size_lr[0]),patch_size), calculate_overlap(int(size_lr[1]),patch_size))
+                    lr_2_rec = recon_im_torch_rectangle_gaus(lr_2.squeeze(), int(size_lr[0]), int(size_lr[1]), calculate_overlap(int(size_lr[0]),patch_size),
+                                                             calculate_overlap(int(size_lr[1]),patch_size), device = config.device).detach().cpu().squeeze(0).squeeze(0)
 
-                    visualize_reconstrated(lr_0_rec, lr_1_rec, lr_2_rec, rec_sr,result_dir,  'weighted'+list(slice_title)[0],index, test_)
+                    visualize_reconstrated(lr_0_rec, lr_1_rec, lr_2_rec, rec_sr,result_dir,  'compare'+list(slice_title)[0], True)
 
                     rec_hr = recon_im_torch_rectangle_gaus(hr, int(size_hr[0]), int(size_hr[1]),
                                                                  calculate_overlap(int(size_hr[0]), patch_size),
-                                                                 calculate_overlap(int(size_hr[1]), patch_size))
+                                                                 calculate_overlap(int(size_hr[1]), patch_size), device = config.device).detach().cpu().squeeze(0).squeeze(0)
                     if np.isnan(rec_hr).any():
                         print("NAN")
                     # rec_hr_tot.append(rec_hr)
@@ -956,18 +1032,14 @@ def Test(model, valid_dataloader_lr,valid_dataloader_hr,result_dir,patch_size,In
 
         if config.save_tensor:
             #print(temp_file_sr_weight_.shape)
-            save_tensor(temp_file_sr_weight_, "SR",  temp_title, result_dir)
-            if "Axial" not in result_dir:
-                save_tensor(temp_file_lr_weight_, "LR", temp_title, result_dir)
+            save_tensor(temp_file_sr_weight_, "SR",  temp_title, result_dir_for_tensors)
+            save_tensor(temp_file_lr_weight_, "LR", temp_title, result_dir_for_tensors)
 
 
         if config.save_nifti:
             #print(temp_file_sr_weight_.shape)
             # temp_title_ = temp_title + "_SR"
-            save_tensor_to_img(temp_file_sr_weight_,result_dir, temp_title )
-
-        if config.only_save:
-            return
+            save_tensor_to_img(temp_file_sr_weight_,result_dir_for_tensors, temp_title )
 
 
         rec_hr_tensor = torch.stack(rec_hr_tot).to(config.device)

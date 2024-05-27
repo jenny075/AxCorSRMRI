@@ -72,7 +72,25 @@ def setup_parser():
     parser.add_argument('--augmentation_state', default=False, type=bool)
     parser.add_argument('--cheakpoint_epoch', default=[], type=int,nargs='*')
     parser.add_argument('--transfer_learning', default=False, type=bool)
+    parser.add_argument('--save_tensor',  default=False, type=bool)
+    parser.add_argument('--save_nifti',  default=False, type=bool)
     return parser
+
+
+def setup_parser_test():
+
+    parser = argparse.ArgumentParser(description='...')
+    parser.add_argument('-list_of_models_and_patch_size', '--models', type=str, nargs='+', action='append',
+                        help='file list')
+    parser.add_argument('--title', default=None, type=str)
+    parser.add_argument('--path_to_results', default=None, type=str)
+    parser.add_argument('--max_workers_valid', default=None, type=int)
+    parser.add_argument('--save_tensor', default=False, type=bool)
+    parser.add_argument('--save_nifti', default=False, type=bool)
+    parser.add_argument('--device', default=None, type=int)
+    parser.add_argument('--image_save_freq_batch', default=100, type=int)
+    return parser
+
 
 
 def Data_Inittializaion (args):
@@ -80,6 +98,8 @@ def Data_Inittializaion (args):
     config.scheduler = args.scheduler
     config.transfer_learning = args.transfer_learning
     config.augmentation_state = args.augmentation_state
+    config.save_tensor = args.save_tensor
+    config.save_nifti = args.save_nifti
     if args.path_to_trained_model is not None:
         # config.resume = True
         config.path_to_trained_model = args.path_to_trained_model
@@ -452,16 +472,17 @@ def training_validation_test(dl_train , dl_valid_lr,dl_valid_hr,dl_test_lr,dl_te
         end_train = time.time()
         print('Epoch train time-', time.strftime("%H:%M:%S", time.gmtime(end_train - start_train)))
 
-        if epoch % config.val_epoch == 0:
-            start_val = time.time()
-            fid, kid, step, max_size_lr, max_size_hr = validate(generator, InceptionV3_model, dl_valid_lr,
-                                                                         dl_valid_hr,
-                                                                         epoch, writer, step,
-                                                                         result_dir,
-                                                                         config.patch_size,
-                                                                         max_size_lr, max_size_hr,config)
-            end_val = time.time()
-            print('Epoch val time-', time.strftime("%H:%M:%S", time.gmtime(end_val - start_val)))
+        if config.val_epoch !=0:
+            if epoch % config.val_epoch == 0 :
+                start_val = time.time()
+                fid, kid, step, max_size_lr, max_size_hr = validate(generator, InceptionV3_model, dl_valid_lr,
+                                                                             dl_valid_hr,
+                                                                             epoch, writer, step,
+                                                                             result_dir,
+                                                                             config.patch_size,
+                                                                             max_size_lr, max_size_hr,config)
+                end_val = time.time()
+                print('Epoch val time-', time.strftime("%H:%M:%S", time.gmtime(end_val - start_val)))
 
         end_epoch = time.time()
 
@@ -590,7 +611,7 @@ def training_validation_test(dl_train , dl_valid_lr,dl_valid_hr,dl_test_lr,dl_te
     list_results = []
     temp_dict = {}
     FID_original_mean, FID_original_std, FID_original_lr_mean, FID_original_lr_std, \
-    KID_original_mean, KID_original_std, KID_original_lr_mean, KID_original_lr_std = Test(generator, dl_test_lr,dl_test_lr,result_dir
+    KID_original_mean, KID_original_std, KID_original_lr_mean, KID_original_lr_std = Test(generator, dl_test_lr,dl_test_hr,result_dir
                       ,config.patch_size,InceptionV3_model)
 
 
@@ -610,3 +631,6 @@ def training_validation_test(dl_train , dl_valid_lr,dl_valid_hr,dl_test_lr,dl_te
         csvwriter.writeheader()
         csvwriter.writerows(list_results)
     print(list_results)
+
+    return
+
